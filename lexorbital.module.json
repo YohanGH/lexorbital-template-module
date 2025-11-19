@@ -1,0 +1,33 @@
+{
+  "name": "lexorbital-template-module",
+  "description": "Template de module pour l'écosystème LexOrbital (TypeScript, CI, conventions, manifestes).",
+  "type": "utility", 
+  "version": "0.1.0",
+  "entryPoints": {
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts"
+  },
+  "lexorbital": {
+    "role": "template-module",
+    "layer": "infrastructure",
+    "compatibility": {
+      "metaKernel": ">=1.0.0 <2.0.0"
+    },
+    "tags": [
+      "template",
+      "typescript",
+      "ci",
+      "conventions"
+    ]
+  },
+  "maintainer": {
+    "name": "LexOrbital Core",
+    "contact": "https://github.com/YohanGH/lexorbital-template-module"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YohanGH/lexorbital-template-module"
+  },
+  "license": "MIT"
+}
+
