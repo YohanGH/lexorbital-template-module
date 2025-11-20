@@ -61,6 +61,7 @@ A proposal issue is required prior to development.
 ### Commit messages — Conventional Commits
 
 Examples:
+
 - feat(audit): add anonymization TTL
 - fix(core): prevent crash when config is missing
 - docs(back-ring): update OpenAPI contract
