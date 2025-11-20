@@ -52,4 +52,3 @@ Any impact on other modules in the LexOrbital ecosystem?
 - [] I have updated lexorbital.module.json if needed
 - [] I have updated CHANGELOG.md (Unreleased section) if needed
 - [] All existing tests pass
-

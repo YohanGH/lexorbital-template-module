@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# Trigger: After git merge or git pull
+# Goal: remind to run `pnpm install` if dependencies have changed
+
+echo "🔄 Post-merge automation..."
+
+# Simple dependency check
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null \
+  | grep -E "package(-lock)?\.json$" >/dev/null; then
+  echo "📦 Dependencies may have changed - consider running 'pnpm install'"
+fi
+
+echo "✅ Post-merge completed!" 
