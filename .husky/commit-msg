@@ -15,8 +15,12 @@
 
 echo "📝 Validating commit message with commitlint..."
 
-# 1. Execute commitlint with detailed output
-npx --no-install commitlint --edit "$1" --verbose
+# 1. Execute commitlint with detailed output (prefer pnpm when available)
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm exec commitlint --edit "$1" --verbose
+else
+  npx --no-install commitlint --edit "$1" --verbose
+fi
 
 if [ $? -ne 0 ]; then
   echo ""

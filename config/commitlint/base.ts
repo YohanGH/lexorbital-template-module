@@ -12,17 +12,17 @@ export const baseConfig: UserConfig = {
   extends: ["@commitlint/config-conventional"],
 
   rules: {
-    // Allowed types
-    "type-enum": [RuleConfigSeverity.Error, "always", [...COMMIT_TYPES]],
+    // Allowed types (warning only so developers keep flexibility)
+    "type-enum": [RuleConfigSeverity.Warning, "always", [...COMMIT_TYPES]],
 
-    // Allowed scopes
-    "scope-enum": [RuleConfigSeverity.Error, "always", [...COMMIT_SCOPES]],
+    // Allowed scopes (warning-level to keep guidance without blocking)
+    "scope-enum": [RuleConfigSeverity.Warning, "always", [...COMMIT_SCOPES]],
 
-    // Enforce a scope: every commit must state *where* it applies
-    "scope-empty": [RuleConfigSeverity.Error, "never"],
+    // Scope is recommended but optional
+    "scope-empty": [RuleConfigSeverity.Warning, "never"],
 
-    // Type is mandatory
-    "type-empty": [RuleConfigSeverity.Error, "never"],
+    // Type is recommended but optional
+    "type-empty": [RuleConfigSeverity.Warning, "never"],
 
     // Subject is mandatory
     "subject-empty": [RuleConfigSeverity.Error, "never"],
@@ -39,6 +39,9 @@ export const baseConfig: UserConfig = {
 
     // Max header length (readable in git log / GitHub UI)
     "header-max-length": [RuleConfigSeverity.Error, "always", 100],
+
+    // Allow long body lines (warn only)
+    "body-max-line-length": [RuleConfigSeverity.Warning, "always", 160],
 
     // Optional: disable some default rules if needed
     // "body-leading-blank": [RuleConfigSeverity.Warning, "always"],

@@ -101,7 +101,4 @@ jobs:
           version: 9
           run_install: false
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec prettier . --write
-      - uses: autofix-ci/action@v1
-        with:
-          commit-message: "chore(prettier): format code with prettier in CI action"
+      - run: pnpm exec prettier . --check
