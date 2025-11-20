@@ -71,19 +71,19 @@ Name your repo:
 
 **2. Install dependencies**
 
-npm install
+pnpm install
 
 **3. Development**
 
-npm run dev
+pnpm run dev
 
 **4. Testing**
 
-npm test
+pnpm test
 
 **5. Production build**
 
-npm run build
+pnpm run build
 
 **6. Optional: build Docker image**
 
@@ -172,8 +172,8 @@ Recommended tools:
 
 Commands:
 
-- `npm test`  
-- `npm run coverage` (optional)
+- `pnpm test`  
+- `pnpm run coverage` (optional)
 
 Each module should test:
 

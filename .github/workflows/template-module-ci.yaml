@@ -1,0 +1,79 @@
+name: template-module-ci
+
+on:
+  push:
+    branches:
+      - main
+      - '*/*'
+  pull_request:
+    branches:
+      - '**'
+
+permissions:
+  contents: read
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    if: github.ref_type == 'branch' && contains(github.ref, '/')
+    steps:
+      - name: Check branch name
+        run: |
+          BRANCH_NAME="${GITHUB_REF_NAME}"
+          PATTERN='^(feat|fix|chore|refactor|docs|ci|infra|security)\/[a-z0-9]+(-[a-z0-9]+)+$'
+          if ! echo "$BRANCH_NAME" | grep -Eq "$PATTERN"; then
+            echo "❌ LexOrbital: invalid branch name '$BRANCH_NAME'"
+            echo "   Expected: <type>/<scope>-<short-desc-kebab>"
+            echo "   type ∈ feat|fix|chore|refactor|docs|ci|infra|security"
+            exit 1
+          fi
+          echo "✅ Branch name '$BRANCH_NAME' is valid"
+
+  release:
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec semantic-release
+
+  commitlint:
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Print versions
+        run: |
+          git --version
+          node --version
+          pnpm --version
+          pnpm exec commitlint --version
+
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: pnpm exec commitlint --last --verbose
+
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose

@@ -128,17 +128,17 @@ and **must not be reported publicly**.
 
 ### For a module:
 
-- npm install
-- npm run dev
-- npm test
+- pnpm install
+- pnpm run dev
+- pnpm test
 - docker build .
 
 Modules must run **in isolation**.
 
 ### For lexorbital-core:
 
-- npm install
-- npm run dev
+- pnpm install
+- pnpm run dev
 
 
 Modules appear under `/modules` via subtree.
