@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+# This hook runs on every `git commit`
+# Goal: format / lint staged files
+
+. "$(dirname "$0")/common.sh"
+
+echo "🚀 Running pre-commit checks..."
+
+# Lint/format only staged files via lint-staged
+npx --no-install lint-staged
+STATUS=$?
+
+if [ $STATUS -ne 0 ]; then
+  echo "❌ Pre-commit checks failed (lint-staged)."
+  exit $STATUS
+fi
+
+echo "✅ Pre-commit checks passed!"
