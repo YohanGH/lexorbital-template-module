@@ -1,10 +1,9 @@
 ---
 name: Architecture / Module proposal
 about: Describe this issue template's purpose here.
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 For:
@@ -12,8 +11,8 @@ For:
 – idea for structural changes (new convention, new manifest),
 – overall design issues (not just a “small feature”).
 
-
 Fields:
+
 - Type of proposal:
   - [ ] New module
   - [ ] Meta-Kernel evolution

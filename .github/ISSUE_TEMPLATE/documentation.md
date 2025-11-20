@@ -1,10 +1,9 @@
 ---
 name: Documentation
 about: Describe this issue template's purpose here.
-title: ''
+title: ""
 labels: documentation
-assignees: ''
-
+assignees: ""
 ---
 
 For:
@@ -13,6 +12,7 @@ For:
 – README or documentation page to be completed.
 
 Fields:
+
 - Page concerned (URL/path)
 - Problem identified
 - Proposed correction/clarification

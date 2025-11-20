@@ -1,4 +1,5 @@
-# **LexOrbital – Module Template**  
+# **LexOrbital – Module Template**
+
 _Official template for creating standardized, compliant, and autonomous LexOrbital modules._
 
 This repository defines the **canonical structure**, **tooling**, and **conventions** required for any module that integrates into the **LexOrbital Station** (Core + Rings + Modules ecosystem).
@@ -9,20 +10,20 @@ This repository defines the **canonical structure**, **tooling**, and **conventi
 
 Every module generated from this template is guaranteed to be:
 
-- **Autonomous** — runs independently (own Dockerfile + own CI)  
-- **Replaceable** — plug-and-play via a shared manifest  
-- **Consistent** — same structure, same quality bar  
-- **Secure by design** — enforced commit rules + static analysis  
-- **Documented** — markdown + manifest  
+- **Autonomous** — runs independently (own Dockerfile + own CI)
+- **Replaceable** — plug-and-play via a shared manifest
+- **Consistent** — same structure, same quality bar
+- **Secure by design** — enforced commit rules + static analysis
+- **Documented** — markdown + manifest
 - **Properly versioned** — SemVer + automated CHANGELOG
 
 This is the required starting point for modules such as:
 
-- `lexorbital-module-auth`  
-- `lexorbital-module-audit`  
-- `lexorbital-module-mailer`  
-- `lexorbital-module-rbac`  
-- `lexorbital-module-<community>`  
+- `lexorbital-module-auth`
+- `lexorbital-module-audit`
+- `lexorbital-module-mailer`
+- `lexorbital-module-rbac`
+- `lexorbital-module-<community>`
 
 ---
 
@@ -32,26 +33,26 @@ This template provides:
 
 **Core folders**
 
-- `src/` — main source code  
-- `tests/` — unit tests  
-- `docs/` — optional documentation  
-- `module.json` — module manifest  
-- `Dockerfile` — minimal containerization  
+- `src/` — main source code
+- `tests/` — unit tests
+- `docs/` — optional documentation
+- `module.json` — module manifest
+- `Dockerfile` — minimal containerization
 
 **Project configuration**
 
-- `.editorconfig`  
-- `.gitignore`  
-- `README.md`  
-- `CHANGELOG.md`  
+- `.editorconfig`
+- `.gitignore`
+- `README.md`
+- `CHANGELOG.md`
 
 **Tooling**
 
-- TypeScript (strict)  
-- ESLint + Prettier  
-- Husky (pre-commit + commit-msg)  
-- Commitlint (Conventional Commits)  
-- Standard-version (Semantic Versioning + changelog automation)  
+- TypeScript (strict)
+- ESLint + Prettier
+- Husky (pre-commit + commit-msg)
+- Commitlint (Conventional Commits)
+- Standard-version (Semantic Versioning + changelog automation)
 - Minimal GitHub Actions CI workflow
 
 All LexOrbital modules **share the exact same skeleton**.
@@ -65,9 +66,9 @@ All LexOrbital modules **share the exact same skeleton**.
 Use GitHub → **Use this template** →  
 Name your repo:
 
-- `lexorbital-module-auth`  
-- `lexorbital-module-audit`  
-- `lexorbital-module-mailer`  
+- `lexorbital-module-auth`
+- `lexorbital-module-audit`
+- `lexorbital-module-mailer`
 
 **2. Install dependencies**
 
@@ -89,7 +90,6 @@ pnpm run build
 
 docker build -t lexorbital/<module-name>:dev .
 
-
 ---
 
 ## 📜 **Module Manifest (`module.json`)**
@@ -97,23 +97,23 @@ docker build -t lexorbital/<module-name>:dev .
 Example:
 
 {
-  "name": "lexorbital-module-auth",
-  "version": "0.1.0",
-  "type": "back",
-  "entry": "dist/index.js",
-  "compat": {
-    "rings": ["back"],
-    "core": ">=0.1.0"
-  },
-  "env": ["JWT_SECRET", "DATABASE_URL"]
+"name": "lexorbital-module-auth",
+"version": "0.1.0",
+"type": "back",
+"entry": "dist/index.js",
+"compat": {
+"rings": ["back"],
+"core": ">=0.1.0"
+},
+"env": ["JWT_SECRET", "DATABASE_URL"]
 }
 
 The LexOrbital Core uses this manifest to:
 
-- validate the module  
-- dock it into the appropriate Ring (front/back/infra)  
-- ensure compatibility  
-- auto-generate documentation  
+- validate the module
+- dock it into the appropriate Ring (front/back/infra)
+- ensure compatibility
+- auto-generate documentation
 
 The manifest is **mandatory**.
 
@@ -123,12 +123,12 @@ The manifest is **mandatory**.
 
 Every LexOrbital module MUST:
 
-- use **Conventional Commits** (`feat:`, `fix:`, `refactor:`…)  
-- include a **Dockerfile** (module-scoped only)  
-- include at least **one healthcheck test** + **one functional test**  
-- expose a complete **module.json** manifest  
-- provide a clear **README**  
-- pass the included **CI** without errors  
+- use **Conventional Commits** (`feat:`, `fix:`, `refactor:`…)
+- include a **Dockerfile** (module-scoped only)
+- include at least **one healthcheck test** + **one functional test**
+- expose a complete **module.json** manifest
+- provide a clear **README**
+- pass the included **CI** without errors
 
 No module can be integrated into the Station without fulfilling these rules.
 
@@ -139,10 +139,10 @@ No module can be integrated into the Station without fulfilling these rules.
 A minimal GitHub Actions workflow is included.  
 It runs:
 
-- Install  
-- Lint  
-- Test  
-- Build  
+- Install
+- Lint
+- Test
+- Build
 
 Deployment (CD) belongs to the **LexOrbital Station** (`lexorbital-stack`)  
 and must **not** be added to individual modules.
@@ -166,19 +166,19 @@ All changes must originate from the module’s own repository.
 
 Recommended tools:
 
-- **Jest** — unit testing  
-- **Supertest** — backend HTTP modules  
-- **React Testing Library** — frontend UI modules  
+- **Jest** — unit testing
+- **Supertest** — backend HTTP modules
+- **React Testing Library** — frontend UI modules
 
 Commands:
 
-- `pnpm test`  
+- `pnpm test`
 - `pnpm run coverage` (optional)
 
 Each module should test:
 
-- healthcheck endpoint or entrypoint  
-- at least one functional behaviour  
+- healthcheck endpoint or entrypoint
+- at least one functional behaviour
 
 ---
 
@@ -195,7 +195,7 @@ Instead, follow the instructions in:
 
 Before contributing or opening an issue, please read:
 
-- `CONTRIBUTING.md`  
+- `CONTRIBUTING.md`
 - `CODE_OF_CONDUCT.md`
 
 ---
@@ -204,10 +204,10 @@ Before contributing or opening an issue, please read:
 
 LexOrbital modules are conceived as:
 
-- **vessels**  
-- **orbiting a law-driven core**  
-- bound by shared **contracts**  
-- minimal, secure, and replaceable  
+- **vessels**
+- **orbiting a law-driven core**
+- bound by shared **contracts**
+- minimal, secure, and replaceable
 
 > _“Modules are vessels — autonomous, replaceable, orbiting a stable core.”_
 
@@ -227,4 +227,3 @@ Add maintainer names or GitHub handles here.
 
 Thank you for contributing to **LexOrbital**  
 and helping build a modular, compliant, and elegant architecture.
-

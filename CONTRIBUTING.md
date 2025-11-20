@@ -11,8 +11,8 @@ You can contribute by:
 
 Before contributing:
 
-1. Read the **Code of Conduct**  
-2. Read the **Security Policy**  
+1. Read the **Code of Conduct**
+2. Read the **Security Policy**
 3. Understand the architecture (Meta-Kernel / Rings / Modules)
 
 ---
@@ -61,6 +61,7 @@ A proposal issue is required prior to development.
 ### Commit messages — Conventional Commits
 
 Examples:
+
 - feat(audit): add anonymization TTL
 - fix(core): prevent crash when config is missing
 - docs(back-ring): update OpenAPI contract
@@ -75,16 +76,16 @@ Examples:
 
 ## 4. Creating a Module
 
-1. Open an issue: **Architecture / Module Proposal**  
-2. Discuss manifest and structure  
-3. Clone the template module  
+1. Open an issue: **Architecture / Module Proposal**
+2. Discuss manifest and structure
+3. Clone the template module
 4. Implement:
-   - minimal Dockerfile  
-   - minimal CI  
-   - manifest file  
-   - tests  
-   - documentation  
-5. Submit the PR to the module repository  
+   - minimal Dockerfile
+   - minimal CI
+   - manifest file
+   - tests
+   - documentation
+5. Submit the PR to the module repository
 6. Maintainers will integrate into `lexorbital-core` via **git subtree**
 
 🛑 Never open PRs directly modifying `lexorbital-core/modules/*`.
@@ -114,9 +115,9 @@ Maintainers may request:
 
 Use the GitHub templates:
 
-- Bug report  
-- Feature request  
-- Documentation issue  
+- Bug report
+- Feature request
+- Documentation issue
 - Architecture / Module proposal
 
 Security issues must follow **SECURITY.md**  
@@ -139,7 +140,6 @@ Modules must run **in isolation**.
 
 - pnpm install
 - pnpm run dev
-
 
 Modules appear under `/modules` via subtree.
 
@@ -171,6 +171,6 @@ Modules appear under `/modules` via subtree.
 ---
 
 # Thank you ❤️
+
 Thank you for helping shape **LexOrbital** —
 a modular, compliant, and secure orbital architecture for web systems.
-
