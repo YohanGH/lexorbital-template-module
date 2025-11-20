@@ -18,8 +18,8 @@ export const baseConfig: UserConfig = {
     // Allowed scopes (warning-level to keep guidance without blocking)
     "scope-enum": [RuleConfigSeverity.Warning, "always", [...COMMIT_SCOPES]],
 
-    // Scope is recommended but optional
-    "scope-empty": [RuleConfigSeverity.Warning, "never"],
+    // Scope is fully optional
+    "scope-empty": [RuleConfigSeverity.Disabled],
 
     // Type is recommended but optional
     "type-empty": [RuleConfigSeverity.Warning, "never"],
@@ -38,10 +38,10 @@ export const baseConfig: UserConfig = {
     "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
 
     // Max header length (readable in git log / GitHub UI)
-    "header-max-length": [RuleConfigSeverity.Error, "always", 100],
+    "header-max-length": [RuleConfigSeverity.Error, "always", 255],
 
     // Allow long body lines (warn only)
-    "body-max-line-length": [RuleConfigSeverity.Warning, "always", 160],
+    "body-max-line-length": [RuleConfigSeverity.Warning, "always", 255],
 
     // Optional: disable some default rules if needed
     // "body-leading-blank": [RuleConfigSeverity.Warning, "always"],
