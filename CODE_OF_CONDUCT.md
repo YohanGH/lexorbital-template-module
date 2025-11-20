@@ -55,11 +55,11 @@ including issue locking, temporary bans, or permanent removal from the repositor
 
 LexOrbital enforces strict technical policies:
 
-- **Conventional Commits**  
-- **Template-based module structure**  
-- **Security by design**  
-- **Standardized TypeScript/React/Node conventions**  
-- **Mandatory minimal documentation**  
+- **Conventional Commits**
+- **Template-based module structure**
+- **Security by design**
+- **Standardized TypeScript/React/Node conventions**
+- **Mandatory minimal documentation**
 - **Avoidance of unnecessary dependencies**
 
 Contributing implies respecting these principles at all times.
@@ -99,4 +99,3 @@ help foster an engineering environment that is:
 
 Thank you for helping make LexOrbital a place where code, ideas, and people  
 coexist in a healthy and creative orbit.
-

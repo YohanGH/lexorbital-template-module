@@ -80,4 +80,3 @@ To contribute to this module or to the template:
 - Respect the conventions:
   - Code style (ESLint / Prettier)
   - Commit conventions (Conventional Commits)
-

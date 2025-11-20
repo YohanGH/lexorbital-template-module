@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+
+# Trigger: before each `git push`
+# Goal: ensure branch naming, tests and lint pass
+
+echo "🚀 Running pre-push checks..."
+
+# Check branch naming convention
+branch_name="$(git rev-parse --abbrev-ref HEAD)"
+
+pattern='^(feat|fix|chore|refactor|docs|ci|infra|security)\/[a-z0-9]+(-[a-z0-9]+)+$'
+
+if ! echo "$branch_name" | grep -Eq "$pattern"; then
+  echo "❌ LexOrbital: invalid branch name '$branch_name'"
+  echo "   Expected: <type>/<scope>-<short-desc-kebab>"
+  echo "   type ∈ feat|fix|chore|refactor|docs|ci|infra|security"
+  exit 1
+fi
+
+echo "✅ Branch name check passed"
+
+# Optional: ensure code is formatted before pushing
+if pnpm run format:check 2>/dev/null; then
+  echo "✅ Format check passed"
+elif pnpm exec prettier --check . 2>/dev/null; then
+  echo "✅ Format check passed (prettier)"
+else
+  echo "⚠️  Format check skipped (no format:check script found)"
+fi
+
+echo "🧪 Running tests..."
+pnpm test
+TEST_STATUS=$?
+
+if [ $TEST_STATUS -ne 0 ]; then
+  echo "❌ Tests failed. Push aborted."
+  exit $TEST_STATUS
+fi
+
+echo "🎨 Running lint..."
+pnpm run lint
+LINT_STATUS=$?
+
+if [ $LINT_STATUS -ne 0 ]; then
+  echo "❌ Lint failed. Push aborted."
+  exit $LINT_STATUS
+fi
+
+echo "✅ Pre-push checks passed. Ready to push 🚀"

@@ -1,11 +1,11 @@
 {
-  "name": "lexorbital-template-module"",
+  "name": "lexorbital-template-module",
   "version": "0.1.0",
   "description": "Template module for the LexOrbital ecosystem, including conventions, CI setup, documentation structure, and TypeScript scaffold.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-   "files": [
+  "files": [
     "dist",
     "lexorbital.module.json"
   ],
@@ -13,12 +13,15 @@
     "dev": "tsc --watch",
     "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
-    "lint": "eslint . --ext .ts",
-    "fmt": "prettier --write .",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:ui": "vitest",
-    "prepare": "husky install",
-    "release": "standard-version"
+    "prepare": "node .husky/install.mjs",
+    "release": "standard-version",
+    "commit": "commit"
   },
   "keywords": [
     "lexorbital",
@@ -43,14 +46,21 @@
       "prettier --write"
     ]
   },
+  "*.{js,jsx,ts,tsx}": [
+    "prettier --write"
+  ],
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
+    "@commitlint/types": "^20.0.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/github": "^12.0.2",
     "@semantic-release/release-notes-generator": "^14.1.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "prettier": "3.6.2",
     "semantic-release": "^25.0.2"
   }
 }
