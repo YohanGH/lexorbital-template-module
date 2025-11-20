@@ -6,48 +6,48 @@ import { COMMIT_TYPES, COMMIT_SCOPES } from "./types";
 
 export const baseConfig: UserConfig = {
   /*
-   * On étend la config "conventional" officielle.
-   * Ça garantit la compatibilité avec les outils type standard-version / semantic-release.
+   * Extends the official "conventional" config.
+   * This guarantees compatibility with tools such as standard-version / semantic-release.
    */
   extends: ["@commitlint/config-conventional"],
 
   rules: {
-    // Types autorisés
+    // Allowed types
     "type-enum": [RuleConfigSeverity.Error, "always", [...COMMIT_TYPES]],
 
-    // Scopes autorisés
+    // Allowed scopes
     "scope-enum": [RuleConfigSeverity.Error, "always", [...COMMIT_SCOPES]],
 
-    // Imposer un scope : chaque commit doit dire *où* il agit
+    // Enforce a scope: every commit must state *where* it applies
     "scope-empty": [RuleConfigSeverity.Error, "never"],
 
-    // Type obligatoire
+    // Type is mandatory
     "type-empty": [RuleConfigSeverity.Error, "never"],
 
-    // Sujet obligatoire
+    // Subject is mandatory
     "subject-empty": [RuleConfigSeverity.Error, "never"],
 
-    // Pas de majuscule façon titre au début, style phrase ou lower
+    // No title-style capitalization, use sentence-case or lower-case
     "subject-case": [
       RuleConfigSeverity.Error,
       "always",
       ["sentence-case", "lower-case"],
     ],
 
-    // Pas de point final dans le header
+    // No trailing period in the header
     "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
 
-    // Longueur max du header (lisible dans git log / GitHub UI)
+    // Max header length (readable in git log / GitHub UI)
     "header-max-length": [RuleConfigSeverity.Error, "always", 100],
 
-    // Optionnel : tu peux désactiver certaines règles par défaut
+    // Optional: disable some default rules if needed
     // "body-leading-blank": [RuleConfigSeverity.Warning, "always"],
     // "footer-leading-blank": [RuleConfigSeverity.Warning, "always"],
   },
 
   /*
-   * Si tu veux aussi vérifier les messages "Merge branch '...'" etc,
-   * tu peux mettre defaultIgnores: false. Sinon on laisse la valeur par défaut.
+   * If you want to lint messages such as "Merge branch '...'",
+   * set defaultIgnores to false. Otherwise keep the default.
    */
   // defaultIgnores: false,
 };

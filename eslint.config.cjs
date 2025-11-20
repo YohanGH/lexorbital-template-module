@@ -48,7 +48,7 @@ const backendConfig = {
     import: importPlugin,
   },
   rules: {
-    // Style général
+    // General style
     "no-console": ["warn", { allow: ["warn", "error"] }],
 
     // TS
