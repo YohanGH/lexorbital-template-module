@@ -92,7 +92,6 @@ docker build -t lexorbital/<module-name>:dev .
 
 ---
 
-
 ## 🚀 **Create a LexOrbital Module**
 
 1. **Use this template** — enable this repo as a GitHub Template, then click **Use this template** to generate `lexorbital-module-<scope>`.
