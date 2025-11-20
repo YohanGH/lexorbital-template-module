@@ -1,6 +1,6 @@
 {
   "name": "lexorbital-template-module",
-  "description": "Template de module pour l'écosystème LexOrbital (TypeScript, CI, conventions, manifestes).",
+  "description": "Module template for the LexOrbital ecosystem (TypeScript, CI, conventions, manifests).",
   "type": "utility",
   "version": "0.1.0",
   "entryPoints": {

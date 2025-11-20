@@ -1,28 +1,28 @@
 // config/commitlint/types.ts
 
 export const COMMIT_TYPES = [
-  "build", // changements liés au build (webpack, vite, etc.)
-  "chore", // tâches diverses, scripts, maintenance
-  "ci", // pipeline CI/CD
-  "docs", // documentation uniquement
-  "feat", // nouvelle fonctionnalité
-  "fix", // correction de bug
-  "perf", // amélioration de perf
-  "refactor", // refacto interne sans changement fonctionnel
-  "revert", // revert d'un commit
-  "style", // formatage, lint, pas de logique
-  "test", // tests uniquement
+  "build", // build-related changes (webpack, vite, etc.)
+  "chore", // chores, scripts, maintenance
+  "ci", // CI/CD pipeline
+  "docs", // documentation only
+  "feat", // new feature
+  "fix", // bug fix
+  "perf", // performance improvement
+  "refactor", // internal refactor without functional change
+  "revert", // revert a commit
+  "style", // formatting or lint, no logic
+  "test", // tests only
 ] as const;
 
 export type CommitType = (typeof COMMIT_TYPES)[number];
 
 export const COMMIT_SCOPES = [
-  // Architecture & noyau
+  // Architecture & core
   "core",
   "kernel",
   "domain",
 
-  // Modules/applications LexOrbital
+  // LexOrbital modules/applications
   "module-auth",
   "module-orchestrator",
   "module-agents",
@@ -35,7 +35,7 @@ export const COMMIT_SCOPES = [
   "config",
   "deps",
 
-  // Documentation & connaissance
+  // Documentation & knowledge
   "docs",
   "guides",
   "specs",

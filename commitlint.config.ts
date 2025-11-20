@@ -5,7 +5,7 @@ import { baseConfig } from "./config/commitlint/base";
 
 const Configuration: UserConfig = {
   ...baseConfig,
-  // Ici tu peux surcharger quelques règles spécifiques au repo si besoin
+  // Override repo-specific rules here if needed
 };
 
 export default Configuration;

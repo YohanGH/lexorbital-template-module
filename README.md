@@ -92,6 +92,24 @@ docker build -t lexorbital/<module-name>:dev .
 
 ---
 
+## 🚀 **Create a LexOrbital Module**
+
+1. **Use this template** — enable this repo as a GitHub Template, then click **Use this template** to generate `lexorbital-module-<scope>`.
+2. **Rename the package** — align both the repository name and the `package.json` `name` field with the required `lexorbital-module-` prefix.
+3. **Install dependencies** — run `npm install` (or `pnpm install`) to pull TypeScript, ESLint, Vitest, Husky, and Commitlint.
+4. **Adjust metadata** — update `package.json` (`description`, `repository`, `author`, scripts) along with `lexorbital.module.json` and this `README.md` before pushing the module.
+5. **Validate the baseline** — run `npm run lint`, `npm test`, and `npm run build` to ensure CI passes before adding your features.
+
+## 🧮 **Versioning Policy**
+
+- Strict SemVer: MAJOR.MINOR.PATCH for every module release.
+- `feat:` (without breaking changes) bumps MINOR and updates the CHANGELOG.
+- `fix:` and `perf:` bump PATCH for safe corrections and optimizations.
+- `feat!:` or any commit with `BREAKING CHANGE` bumps MAJOR.
+- `chore:`, `docs:`, `refactor:` with no breaking changes do not trigger a release.
+
+---
+
 ## 📜 **Module Manifest (`module.json`)**
 
 Example:
