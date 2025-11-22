@@ -1,19 +1,132 @@
 #!/usr/bin/env sh
 
-# This hook runs on every `git commit`
-# Goal: format / lint staged files
+# Trigger: At each git commit
+# Duration: ~10-60 seconds
+# Actions:
+#   - TypeScript type checking (tsc --noEmit) if TS files modified
+#   - Unit tests (vitest run) if code/test files modified
+#   - Prettier formatting check on staged files
+#   - ESLint with auto-fix on staged files via lint-staged
+#   - Block commit if any check fails
+# Goal: Quick quality filter to catch obvious errors early before CI
 
 . "$(dirname "$0")/common.sh"
 
 echo "🚀 Running pre-commit checks..."
 
-# Lint/format only staged files via lint-staged
-npx --no-install lint-staged
-STATUS=$?
+# Detect which files were staged for commit
+echo "🔍 Detecting staged files..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
 
-if [ $STATUS -ne 0 ]; then
-  echo "❌ Pre-commit checks failed (lint-staged)."
-  exit $STATUS
+if [ -z "$STAGED_FILES" ]; then
+  echo "⚠️  No files staged for commit. Skipping pre-commit checks."
+  exit 0
 fi
 
-echo "✅ Pre-commit checks passed!"
+# Check if TypeScript files or code files were modified
+TS_FILES_MODIFIED=false
+CODE_MODIFIED=false
+
+# Process each staged file
+for file in $(echo "$STAGED_FILES" | tr '\n' ' '); do
+  [ -z "$file" ] && continue
+  
+  # Check for TypeScript files
+  case "$file" in
+    *.ts|*.tsx)
+      TS_FILES_MODIFIED=true
+      CODE_MODIFIED=true
+      ;;
+  esac
+  # Check for other code files (src/, tests/, config/, or JS extensions)
+  case "$file" in
+    src/*|tests/*|config/*|*.js|*.jsx)
+      CODE_MODIFIED=true
+      ;;
+  esac
+done
+
+# If no code files were modified, skip type checking (e.g., docs-only changes)
+if [ "$CODE_MODIFIED" = false ]; then
+  echo "📝 No code files detected - skipping type check (docs/config only)"
+  TS_FILES_MODIFIED=false
+fi
+
+# Type checking (only if TypeScript files were modified)
+if [ "$TS_FILES_MODIFIED" = true ]; then
+  echo "🔍 Type checking TypeScript files..."
+
+  # Try to find tsconfig.json
+  TSCONFIG=""
+  if [ -f "tsconfig.json" ]; then
+    TSCONFIG="tsconfig.json"
+  elif [ -f "tsconfig.base.json" ]; then
+    TSCONFIG="tsconfig.base.json"
+  fi
+
+  if [ -n "$TSCONFIG" ]; then
+    # Use npx to ensure we use the local TypeScript version
+    npx --no-install tsc --noEmit --project "$TSCONFIG" 2>&1
+    TSC_STATUS=$?
+
+    if [ $TSC_STATUS -ne 0 ]; then
+      echo "❌ TypeScript type check failed!"
+      echo "   Fix type errors before committing."
+      exit $TSC_STATUS
+    fi
+
+    echo "✅ Type check passed"
+  else
+    echo "⚠️  No tsconfig.json found - skipping type check"
+  fi
+else
+  echo "⏭️  Skipping type check (no TypeScript files modified)"
+fi
+
+# Run tests (only if code or test files were modified)
+if [ "$CODE_MODIFIED" = true ]; then
+  echo "🧪 Running unit tests..."
+
+  # Check if vitest is available (should be in package.json)
+  if command -v pnpm >/dev/null 2>&1 && grep -q '"test"' package.json 2>/dev/null; then
+    pnpm test 2>&1
+    TEST_STATUS=$?
+
+    if [ $TEST_STATUS -ne 0 ]; then
+      echo "❌ Tests failed!"
+      echo "   Fix failing tests before committing."
+      exit $TEST_STATUS
+    fi
+
+    echo "✅ All tests passed"
+  elif command -v npx >/dev/null 2>&1; then
+    # Fallback to npx vitest if pnpm is not available
+    npx --no-install vitest run 2>&1
+    TEST_STATUS=$?
+
+    if [ $TEST_STATUS -ne 0 ]; then
+      echo "❌ Tests failed!"
+      echo "   Fix failing tests before committing."
+      exit $TEST_STATUS
+    fi
+
+    echo "✅ All tests passed"
+  else
+    echo "⚠️  Test runner not found - skipping tests"
+  fi
+else
+  echo "⏭️  Skipping tests (no code/test files modified)"
+fi
+
+# Lint-staged (ESLint + Prettier on staged files only)
+echo "🎨 Running lint-staged (ESLint + Prettier)..."
+npx --no-install lint-staged
+LINT_STAGED_STATUS=$?
+
+if [ $LINT_STAGED_STATUS -ne 0 ]; then
+  echo "❌ Lint-staged failed!"
+  echo "   Some files may need manual fixes. Check the output above."
+  exit $LINT_STAGED_STATUS
+fi
+
+echo "✅ All pre-commit checks passed!"
