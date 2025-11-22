@@ -3,7 +3,7 @@ name: 📚 Documentation Generation
 on:
   push:
     branches:
-      - main
+      - develop
       - chore/project-structure-template
     paths:
       - 'docs/**'
