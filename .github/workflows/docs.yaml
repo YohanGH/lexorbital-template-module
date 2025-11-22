@@ -1,4 +1,6 @@
 name: 📚 Documentation Generation
+permissions:
+  contents: write
 
 on:
   push:
