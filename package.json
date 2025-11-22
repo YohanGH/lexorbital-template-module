@@ -1,6 +1,6 @@
 {
   "name": "lexorbital-template-module",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Template module for the LexOrbital ecosystem, including conventions, CI setup, documentation structure, and TypeScript scaffold.",
   "type": "module",
   "main": "dist/index.js",
