@@ -26,7 +26,6 @@ jobs:
       contents: read
       pages: write
       id-token: write
-
     steps:
       # ========================================================================
       # 1. Checkout repository
@@ -156,5 +155,6 @@ jobs:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: deployment
         uses: actions/deploy-pages@v4
 
