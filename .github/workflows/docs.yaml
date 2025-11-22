@@ -9,10 +9,6 @@ on:
       - 'docs/**'
       - 'scripts/generate-docs.sh'
       - '.github/workflows/docs.yaml'
-  pull_request:
-    paths:
-      - 'docs/**'
-      - 'scripts/generate-docs.sh'
   workflow_dispatch: # Allow manual trigger
 
 # Permissions explicites pour la sécurité
