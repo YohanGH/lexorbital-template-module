@@ -1,8 +1,9 @@
 // config/commitlint/base.ts
 
-import type { UserConfig } from "@commitlint/types";
-import { RuleConfigSeverity } from "@commitlint/types";
-import { COMMIT_TYPES, COMMIT_SCOPES } from "./types";
+import type { UserConfig } from "@commitlint/types"
+import { RuleConfigSeverity } from "@commitlint/types"
+
+import { COMMIT_TYPES, COMMIT_SCOPES } from "./types"
 
 export const baseConfig: UserConfig = {
   /*
@@ -15,24 +16,26 @@ export const baseConfig: UserConfig = {
     // Allowed types (warning only so developers keep flexibility)
     "type-enum": [RuleConfigSeverity.Warning, "always", [...COMMIT_TYPES]],
 
+    // Type must be lowercase
+    "type-case": [RuleConfigSeverity.Error, "always", "lower-case"],
+
+    // Type is mandatory
+    "type-empty": [RuleConfigSeverity.Error, "never"],
+
     // Allowed scopes (warning-level to keep guidance without blocking)
     "scope-enum": [RuleConfigSeverity.Warning, "always", [...COMMIT_SCOPES]],
+
+    // Scope must be lowercase
+    "scope-case": [RuleConfigSeverity.Error, "always", "lower-case"],
 
     // Scope is fully optional
     "scope-empty": [RuleConfigSeverity.Disabled],
 
-    // Type is recommended but optional
-    "type-empty": [RuleConfigSeverity.Warning, "never"],
-
     // Subject is mandatory
     "subject-empty": [RuleConfigSeverity.Error, "never"],
 
-    // No title-style capitalization, use sentence-case or lower-case
-    "subject-case": [
-      RuleConfigSeverity.Error,
-      "always",
-      ["sentence-case", "lower-case"],
-    ],
+    // Subject case - disabled to allow any case
+    "subject-case": [RuleConfigSeverity.Disabled],
 
     // No trailing period in the header
     "subject-full-stop": [RuleConfigSeverity.Error, "never", "."],
@@ -49,8 +52,47 @@ export const baseConfig: UserConfig = {
   },
 
   /*
-   * If you want to lint messages such as "Merge branch '...'",
-   * set defaultIgnores to false. Otherwise keep the default.
+   * Ignore patterns for commits that don't need to follow conventional format:
+   * - Merge commits (handled by defaultIgnores from @commitlint/config-conventional)
+   * - Automated commits from bots/tools
    */
-  // defaultIgnores: false,
-};
+  ignores: [
+    (commit: string) => {
+      const message = commit || ""
+      const firstLine = message.split("\n")[0] || ""
+
+      // Ignore merge commits (should be handled by defaultIgnores, but adding for safety)
+      if (firstLine.startsWith("Merge ")) return true
+
+      // Ignore automated GitHub commits (code scanning alerts, Dependabot, etc.)
+      if (firstLine.startsWith("Potential fix")) return true
+      if (firstLine.includes("code scanning alert")) return true
+
+      // Ignore commits with Co-authored-by from GitHub bots
+      if (
+        message.includes("Co-authored-by:") &&
+        message.includes("github-advanced-security")
+      )
+        return true
+      if (
+        message.includes("Signed-off-by:") &&
+        message.includes("github-advanced-security")
+      )
+        return true
+
+      // Ignore commits that don't start with a conventional type (likely automated)
+      // but only if they contain bot signatures
+      if (
+        !firstLine.match(
+          /^(feat|fix|chore|docs|ci|refactor|style|test|perf|build|revert)(\(.+\))?:/
+        ) &&
+        (message.includes("Co-authored-by:") ||
+          message.includes("Signed-off-by:"))
+      ) {
+        return true
+      }
+
+      return false
+    },
+  ],
+}

@@ -1,5 +1,3 @@
-// config/commitlint/types.ts
-
 export const COMMIT_TYPES = [
   "build", // build-related changes (webpack, vite, etc.)
   "chore", // chores, scripts, maintenance
@@ -12,9 +10,9 @@ export const COMMIT_TYPES = [
   "revert", // revert a commit
   "style", // formatting or lint, no logic
   "test", // tests only
-] as const;
+] as const
 
-export type CommitType = (typeof COMMIT_TYPES)[number];
+export type CommitType = (typeof COMMIT_TYPES)[number]
 
 export const COMMIT_SCOPES = [
   // Architecture & core
@@ -32,6 +30,7 @@ export const COMMIT_SCOPES = [
   // Infra & tooling
   "infra",
   "devops",
+  "ci",
   "config",
   "deps",
 
@@ -39,6 +38,6 @@ export const COMMIT_SCOPES = [
   "docs",
   "guides",
   "specs",
-] as const;
+] as const
 
-export type CommitScope = (typeof COMMIT_SCOPES)[number];
+export type CommitScope = (typeof COMMIT_SCOPES)[number]
