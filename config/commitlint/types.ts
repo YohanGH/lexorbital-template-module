@@ -30,6 +30,7 @@ export const COMMIT_SCOPES = [
   // Infra & tooling
   "infra",
   "devops",
+  "ci",
   "config",
   "deps",
 
