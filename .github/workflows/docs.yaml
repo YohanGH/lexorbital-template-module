@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - chore/project-structure-template
     paths:
       - 'docs/**'
       - 'scripts/generate-docs.sh'
