@@ -69,13 +69,26 @@ export const baseConfig: UserConfig = {
       if (firstLine.includes("code scanning alert")) return true
 
       // Ignore commits with Co-authored-by from GitHub bots
-      if (message.includes("Co-authored-by:") && message.includes("github-advanced-security")) return true
-      if (message.includes("Signed-off-by:") && message.includes("github-advanced-security")) return true
+      if (
+        message.includes("Co-authored-by:") &&
+        message.includes("github-advanced-security")
+      )
+        return true
+      if (
+        message.includes("Signed-off-by:") &&
+        message.includes("github-advanced-security")
+      )
+        return true
 
       // Ignore commits that don't start with a conventional type (likely automated)
       // but only if they contain bot signatures
-      if (!firstLine.match(/^(feat|fix|chore|docs|ci|refactor|style|test|perf|build|revert)(\(.+\))?:/) 
-          && (message.includes("Co-authored-by:") || message.includes("Signed-off-by:"))) {
+      if (
+        !firstLine.match(
+          /^(feat|fix|chore|docs|ci|refactor|style|test|perf|build|revert)(\(.+\))?:/
+        ) &&
+        (message.includes("Co-authored-by:") ||
+          message.includes("Signed-off-by:"))
+      ) {
         return true
       }
 

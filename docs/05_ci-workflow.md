@@ -8,7 +8,7 @@ Present the GitHub Actions workflow included in the template, explain each step,
 
 ### 2.1. Pipeline Steps
 
- File: `.github/workflows/ci.yml`
+File: `.github/workflows/ci.yml`
 
 #### Step 1: Checkout Code
 

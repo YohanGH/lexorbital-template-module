@@ -125,7 +125,7 @@ This installs:
 
 #### Step 3: Update `README.md`
 
-```markdown
+````markdown
 # LexOrbital Module - <Scope>
 
 > Short description of the module.
@@ -135,6 +135,7 @@ This installs:
 ```bash
 pnpm install
 ```
+````
 
 ## Configuration
 
@@ -146,15 +147,16 @@ Required environment variables:
 ## Usage
 
 ```typescript
-import { YourService } from 'lexorbital-module-<scope>';
+import { YourService } from "lexorbital-module-<scope>"
 
-const service = new YourService();
+const service = new YourService()
 ```
 
 ## Documentation
 
 See [docs/README.md](./docs/README.md)
-```
+
+````
 
 ## 4. Development Commands
 
@@ -184,7 +186,7 @@ pnpm run format
 
 # TypeScript type checking
 pnpm run type-check
-```
+````
 
 ### 4.2. Docker Commands (optional)
 
