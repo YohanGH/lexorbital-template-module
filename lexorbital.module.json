@@ -1,4 +1,5 @@
 {
+  "$schema": "./schemas/module-manifest.schema.json",
   "name": "lexorbital-template-module",
   "description": "Module template for the LexOrbital ecosystem (TypeScript, CI, conventions, manifests).",
   "type": "utility",

@@ -1,5 +1,3 @@
-// config/commitlint/types.ts
-
 export const COMMIT_TYPES = [
   "build", // build-related changes (webpack, vite, etc.)
   "chore", // chores, scripts, maintenance

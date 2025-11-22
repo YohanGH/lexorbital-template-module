@@ -406,10 +406,10 @@ Un schéma JSON Schema est disponible pour validation automatique :
 
 ```bash
 # Installer ajv-cli
-pnpm install -g ajv-cli
+pnpm install --save-dev @exodus/schemasafe
 
 # Valider le manifeste
-ajv validate -s module-manifest.schema.json -d lexorbital.module.json
+npx schemasafe validate lexorbital.module.json
 ```
 
 ## 7. Exemples complets

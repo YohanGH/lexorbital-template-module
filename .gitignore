@@ -1,44 +1,5 @@
 # Node
 node_modules/
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-package-lock.json
-yarn.lock
-
-# Build
-dist/
-build/
-coverage/
-.tmp/
-.temp/
-
-# TypeScript
-*.tsbuildinfo
-
-# Logs
-logs/
-*.log
-
-# OS / Editor
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-*.swp
-
-# Env
-.env
-.env.local
-.env.*.local
-
-# Misc
-.cache/
-
-
-# Node
-node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -55,6 +16,19 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+# Ignore compiled files outside dist
+/*.js
+/*.d.ts
+/*.d.ts.map
+/*.js.map
+/config/**/*.js
+/config/**/*.d.ts
+/config/**/*.d.ts.map
+/config/**/*.js.map
+/tests/**/*.js
+/tests/**/*.d.ts
+/tests/**/*.d.ts.map
+/tests/**/*.js.map
 
 # Logs
 logs/
@@ -74,4 +48,3 @@ Thumbs.db
 
 # Misc
 .cache/
-
