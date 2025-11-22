@@ -49,14 +49,11 @@
     "node": ">=24.11.1"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
   },
-  "*.{js,jsx,ts,tsx}": [
-    "prettier --write"
-  ],
   "devDependencies": {
     "@commitlint/cli": "20.1.0",
     "@commitlint/config-conventional": "20.0.0",
@@ -68,10 +65,11 @@
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "husky": "9.1.7",
+    "lint-staged": "16.2.7",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "0.6.11",
     "semantic-release": "25.0.2",
-    "vitest": "4.0.12",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vitest": "4.0.12"
   }
 }

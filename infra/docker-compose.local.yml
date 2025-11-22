@@ -11,3 +11,7 @@ services:
       - docs
     # This service is meant to be run on-demand, not as a long-running service
     command: tail -f /dev/null
+
+networks:
+  lexorbital-network:
+    driver: bridge
