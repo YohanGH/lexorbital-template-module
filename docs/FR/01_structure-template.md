@@ -342,9 +342,9 @@ COPY --from=builder /app/dist ./dist
 CMD ["node", "dist/index.js"]
 ```
 
-## 7. Pourquoi cette structure ?
+## 5. Pourquoi cette structure ?
 
-### 7.1. Cohérence
+### 5.1. Cohérence
 
 Tous les modules LexOrbital partagent **exactement la même structure** :
 
@@ -352,7 +352,7 @@ Tous les modules LexOrbital partagent **exactement la même structure** :
 - ✅ Permet l'automatisation (scripts, CI)
 - ✅ Garantit l'interopérabilité avec le Core
 
-### 7.2. Qualité
+### 5.2. Qualité
 
 L'outillage intégré garantit :
 
@@ -361,7 +361,7 @@ L'outillage intégré garantit :
 - ✅ Tests automatiques (Vitest + CI)
 - ✅ Types stricts (TypeScript strict mode)
 
-### 7.3. Autonomie
+### 5.3. Autonomie
 
 Chaque module est **autonome** :
 
@@ -370,7 +370,7 @@ Chaque module est **autonome** :
 - ✅ Versioning SemVer
 - ✅ Lifecycle indépendant
 
-## 8. Checklist de conformité
+## 6. Checklist de conformité
 
 Pour qu'un module soit conforme au template :
 
@@ -385,4 +385,3 @@ Pour qu'un module soit conforme au template :
 - [ ] CI GitHub Actions configurée (lint, test, build)
 - [ ] README.md complet
 - [ ] CHANGELOG.md généré automatiquement
-      s

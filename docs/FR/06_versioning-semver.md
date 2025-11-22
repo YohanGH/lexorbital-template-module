@@ -430,11 +430,6 @@ This is a major release with breaking changes. Please follow this guide:
 2. Replace `login(email, password)` with `login({ email, password })`
 3. Update environment variables (see README)
 
-### Features
-
-...
-```
-
 ## 11. Checklist de versioning
 
 - [ ] Tous les commits suivent Conventional Commits
@@ -445,3 +440,4 @@ This is a major release with breaking changes. Please follow this guide:
 - [ ] CHANGELOG.md généré automatiquement
 - [ ] Tags Git créés automatiquement
 - [ ] GitHub Releases créées automatiquement
+```

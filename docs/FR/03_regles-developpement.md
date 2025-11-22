@@ -186,7 +186,7 @@ describe("MyService", () => {
 
 ```bash
 # Valider avec JSON Schema
-ajv validate -s module-manifest.schema.json -d lexorbital.module.json
+npx schemasafe validate lexorbital.module.json
 ```
 
 ### Règle 6 : CI compliance {#regle-6}
