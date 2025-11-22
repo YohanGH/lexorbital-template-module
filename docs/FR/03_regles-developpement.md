@@ -224,7 +224,6 @@ Le workflow `.github/workflows/ci.yml` doit exécuter :
 - ✅ Aucun `@ts-ignore` ou `@ts-expect-error` sans justification
 - ✅ Pas de `any` sauf cas exceptionnels (alors annoter avec `// eslint-disable-line`)
 
-
 ## 3. Bonnes pratiques (recommandées mais non obligatoires)
 
 ### 3.1. Keep modules focused

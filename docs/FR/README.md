@@ -13,6 +13,7 @@ Guide complet du template LexOrbital Module : création, développement, tests, 
 6. [Versioning Semantic (SemVer)](#fiche-6-versioning-semver)
 7. [Intégration avec LexOrbital Core](#fiche-7-integration-core)
 8. [Sources et références](#fiche-8-sources-et-references)
+9. [Annexe : Validation du manifeste](#fiche-9-annexe-validation-manifeste)
 
 ## Présentation
 
@@ -31,17 +32,18 @@ Le **LexOrbital Module Template** est un template standardisé pour créer des m
 
 Les **8 fiches numérotées** couvrent tous les aspects du développement de modules :
 
-| Fiche  | Titre                   | Contenu                                     |
-| ------ | ----------------------- | ------------------------------------------- |
-| **00** | Démarrage rapide        | Installation, configuration, premier module |
-| **01** | Structure du template   | Arborescence, fichiers, organisation        |
-| **02** | Manifeste de module     | Format `lexorbital.module.json` (MANDATORY) |
-| **03** | Règles de développement | 7 règles obligatoires pour intégration      |
-| **04** | Tests et qualité        | Standards de tests, couverture, outils      |
-| **05** | CI/CD Workflow          | Pipeline GitHub Actions, quality gates      |
-| **06** | Versioning SemVer       | Semantic Versioning automatique             |
-| **07** | Intégration Core        | Git subtree, amarrage, découverte           |
-| **08** | Sources et références   | Sources et références utilisées             |
+| Fiche  | Titre                            | Contenu                                     |
+| ------ | -------------------------------- | ------------------------------------------- |
+| **00** | Démarrage rapide                 | Installation, configuration, premier module |
+| **01** | Structure du template            | Arborescence, fichiers, organisation        |
+| **02** | Manifeste de module              | Format `lexorbital.module.json` (MANDATORY) |
+| **03** | Règles de développement          | 7 règles obligatoires pour intégration      |
+| **04** | Tests et qualité                 | Standards de tests, couverture, outils      |
+| **05** | CI/CD Workflow                   | Pipeline GitHub Actions, quality gates      |
+| **06** | Versioning SemVer                | Semantic Versioning automatique             |
+| **07** | Intégration Core                 | Git subtree, amarrage, découverte           |
+| **08** | Sources et références            | Sources et références utilisées             |
+| **09** | Annexe : Validation du manifeste | Validation JSON Schema et tests             |
 
 ### Documentation supplémentaire
 

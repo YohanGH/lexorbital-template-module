@@ -10,7 +10,9 @@ This repository defines the **canonical structure**, **tooling**, and **conventi
 
 1. **Use this template** → Click **Use this template** on GitHub
 2. **Install dependencies** → `pnpm install`
-3. **Read the docs** → See [`docs/`](./docs/) for complete documentation
+3. **Customize the manifest** → Edit `lexorbital.module.json` with your module info
+4. **Validate your setup** → `pnpm test:manifest`
+5. **Read the docs** → See [`docs/`](./docs/) for complete documentation
 
 ---
 
@@ -18,14 +20,16 @@ This repository defines the **canonical structure**, **tooling**, and **conventi
 
 All detailed information is available in the [`docs/`](./docs/) directory:
 
-- **[Getting Started](./docs/getting-started.md)** — Installation and first steps
-- **[Template Structure](./docs/template-structure.md)** — Project organization
-- **[Module Manifest](./docs/module-manifest.md)** — Understanding `lexorbital.module.json`
-- **[Development Rules](./docs/development-rules.md)** — Mandatory conventions
-- **[Versioning Policy](./docs/versioning.md)** — Semantic versioning guidelines
-- **[CI/CD Workflow](./docs/ci-workflow.md)** — Continuous integration setup
-- **[Integration Guide](./docs/integration.md)** — How modules integrate with LexOrbital Core
-- **[Testing Guidelines](./docs/testing.md)** — Testing best practices
+- **[Quick Start](./docs/00_quick-start.md)** — Installation and first steps
+- **[Template Structure](./docs/01_template-structure.md)** — Project organization
+- **[Module Manifest](./docs/02_module-manifest.md)** — Understanding `lexorbital.module.json`
+- **[Development Rules](./docs/03_development-rules.md)** — Mandatory conventions
+- **[Tests and Quality](./docs/04_tests-quality.md)** — Testing best practices
+- **[CI/CD Workflow](./docs/05_ci-workflow.md)** — Continuous integration setup
+- **[Semantic Versioning](./docs/06_versioning-semver.md)** — Semantic versioning guidelines
+- **[Integration Guide](./docs/07_core-integration.md)** — How modules integrate with LexOrbital Core
+- **[Sources](./docs/08_sources.md)** — References and resources
+- **[Appendix : Manifest Validation](./docs/09_appendix-manifest-validation.md)** — JSON Schema validation
 
 ---
 
