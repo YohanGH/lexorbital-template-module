@@ -1,0 +1,138 @@
+name: 📚 Documentation Generation
+
+on:
+  push:
+    branches:
+      - main
+      - chore/project-structure-template
+    paths:
+      - 'docs/**'
+      - 'scripts/generate-docs.sh'
+      - '.github/workflows/docs.yaml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'scripts/generate-docs.sh'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  generate-documentation:
+    name: Generate HTML, DOCX & PDF Documentation
+    runs-on: ubuntu-24.04
+    
+    steps:
+      # ========================================================================
+      # 1. Checkout repository
+      # ========================================================================
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      # ========================================================================
+      # 2. Create output directory
+      # ========================================================================
+      - name: 📁 Create output directory
+        run: mkdir -p docs/generated
+
+      # ========================================================================
+      # 3. Generate HTML documentation
+      # ========================================================================
+      - name: 🌐 Generate HTML documentation (index.html)
+        run: |
+          docker run --rm \
+            --volume "${{ github.workspace }}:/data" \
+            --workdir /data \
+            pandoc/latex:3.8 \
+            --standalone \
+            --toc \
+            --toc-depth=2 \
+            --template=docs/templates/lexorbital.html \
+            -H docs/templates/pandoc-styles.html \
+            --metadata title="LexOrbital Module Template Guide" \
+            --metadata subtitle="Complete guide for module development" \
+            --metadata author="LexOrbital Core Team" \
+            --metadata date="$(date '+%d %B %Y')" \
+            --output=docs/generated/index.html \
+            docs/README.md \
+            $(find docs -maxdepth 1 -name "[0-9][0-9]_*.md" -type f | sort)
+
+      # ========================================================================
+      # 4. Generate DOCX documentation (Microsoft Word)
+      # ========================================================================
+      - name: 📄 Generate DOCX documentation
+        run: |
+          docker run --rm \
+            --volume "${{ github.workspace }}:/data" \
+            --workdir /data \
+            pandoc/latex:3.8 \
+            --standalone \
+            --toc \
+            --toc-depth=2 \
+            --metadata title="LexOrbital Module Template Guide" \
+            --metadata subtitle="Complete guide for module development" \
+            --metadata author="LexOrbital Core Team" \
+            --output=docs/generated/LexOrbital_Module_Guide.docx \
+            docs/README.md \
+            $(find docs -maxdepth 1 -name "[0-9][0-9]_*.md" -type f | sort)
+
+      # ========================================================================
+      # 5. Generate PDF documentation (via LaTeX)
+      # ========================================================================
+      - name: 📕 Generate PDF documentation
+        run: |
+          docker run --rm \
+            --volume "${{ github.workspace }}:/data" \
+            --workdir /data \
+            pandoc/latex:3.8 \
+            --standalone \
+            --toc \
+            --toc-depth=2 \
+            --pdf-engine=xelatex \
+            -V geometry:margin=1in \
+            -V documentclass=report \
+            -V colorlinks=true \
+            -V linkcolor=blue \
+            -V urlcolor=blue \
+            -V toccolor=blue \
+            --metadata title="LexOrbital Module Template Guide" \
+            --metadata subtitle="Complete guide for module development" \
+            --metadata author="LexOrbital Core Team" \
+            --metadata date="$(date '+%d %B %Y')" \
+            --output=docs/generated/LexOrbital_Module_Guide.pdf \
+            docs/README.md \
+            $(find docs -maxdepth 1 -name "[0-9][0-9]_*.md" -type f | sort)
+
+      # ========================================================================
+      # 6. Upload generated documentation as artifacts
+      # ========================================================================
+      - name: 📦 Upload documentation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lexorbital-documentation
+          path: docs/generated/
+          retention-days: 30
+
+      # ========================================================================
+      # 7. List generated files (for verification)
+      # ========================================================================
+      - name: ✅ List generated files
+        run: |
+          echo "📚 Generated documentation files:"
+          ls -lh docs/generated/
+          echo ""
+          echo "✨ Documentation generated successfully!"
+          echo "  - index.html (HTML)"
+          echo "  - LexOrbital_Module_Guide.docx (Word)"
+          echo "  - LexOrbital_Module_Guide.pdf (PDF)"
+
+      # ========================================================================
+      # 8. Deploy to GitHub Pages (only on main branch push)
+      # ========================================================================
+      - name: 🚀 Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/generated
+          publish_branch: gh-pages
+          commit_message: "📚 Update documentation [skip ci]"
+
