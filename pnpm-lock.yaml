@@ -9,43 +9,49 @@ importers:
   .:
     devDependencies:
       '@commitlint/cli':
-        specifier: ^20.1.0
+        specifier: 20.1.0
         version: 20.1.0(@types/node@24.10.1)(typescript@5.9.3)
       '@commitlint/config-conventional':
-        specifier: ^20.0.0
+        specifier: 20.0.0
         version: 20.0.0
       '@commitlint/types':
-        specifier: ^20.0.0
+        specifier: 20.0.0
         version: 20.0.0
       '@semantic-release/changelog':
-        specifier: ^6.0.3
+        specifier: 6.0.3
         version: 6.0.3(semantic-release@25.0.2(typescript@5.9.3))
       '@semantic-release/commit-analyzer':
-        specifier: ^13.0.1
+        specifier: 13.0.1
         version: 13.0.1(semantic-release@25.0.2(typescript@5.9.3))
       '@semantic-release/github':
-        specifier: ^12.0.2
+        specifier: 12.0.2
         version: 12.0.2(semantic-release@25.0.2(typescript@5.9.3))
       '@semantic-release/release-notes-generator':
-        specifier: ^14.1.0
+        specifier: 14.1.0
         version: 14.1.0(semantic-release@25.0.2(typescript@5.9.3))
       eslint:
-        specifier: ^9.39.1
+        specifier: 9.39.1
         version: 9.39.1(jiti@2.6.1)
       eslint-config-prettier:
-        specifier: ^10.1.8
+        specifier: 10.1.8
         version: 10.1.8(eslint@9.39.1(jiti@2.6.1))
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
       prettier:
         specifier: 3.6.2
         version: 3.6.2
+      prettier-plugin-tailwindcss:
+        specifier: 0.6.11
+        version: 0.6.11(prettier@3.6.2)
       semantic-release:
-        specifier: ^25.0.2
+        specifier: 25.0.2
         version: 25.0.2(typescript@5.9.3)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
       vitest:
-        specifier: ^4.0.12
+        specifier: 4.0.12
         version: 4.0.12(@types/node@24.10.1)(jiti@2.6.1)
 
 packages:
@@ -1710,6 +1716,61 @@ packages:
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
+
+  prettier-plugin-tailwindcss@0.6.11:
+    resolution: {integrity: sha512-YxaYSIvZPAqhrrEpRtonnrXdghZg1irNg4qrjboCXrpybLWVs55cW2N3juhspVJiO0JBvYJT8SYsJpc8OQSnsA==}
+    engines: {node: '>=14.21.3'}
+    peerDependencies:
+      '@ianvs/prettier-plugin-sort-imports': '*'
+      '@prettier/plugin-pug': '*'
+      '@shopify/prettier-plugin-liquid': '*'
+      '@trivago/prettier-plugin-sort-imports': '*'
+      '@zackad/prettier-plugin-twig': '*'
+      prettier: ^3.0
+      prettier-plugin-astro: '*'
+      prettier-plugin-css-order: '*'
+      prettier-plugin-import-sort: '*'
+      prettier-plugin-jsdoc: '*'
+      prettier-plugin-marko: '*'
+      prettier-plugin-multiline-arrays: '*'
+      prettier-plugin-organize-attributes: '*'
+      prettier-plugin-organize-imports: '*'
+      prettier-plugin-sort-imports: '*'
+      prettier-plugin-style-order: '*'
+      prettier-plugin-svelte: '*'
+    peerDependenciesMeta:
+      '@ianvs/prettier-plugin-sort-imports':
+        optional: true
+      '@prettier/plugin-pug':
+        optional: true
+      '@shopify/prettier-plugin-liquid':
+        optional: true
+      '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-css-order:
+        optional: true
+      prettier-plugin-import-sort:
+        optional: true
+      prettier-plugin-jsdoc:
+        optional: true
+      prettier-plugin-marko:
+        optional: true
+      prettier-plugin-multiline-arrays:
+        optional: true
+      prettier-plugin-organize-attributes:
+        optional: true
+      prettier-plugin-organize-imports:
+        optional: true
+      prettier-plugin-sort-imports:
+        optional: true
+      prettier-plugin-style-order:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
 
   prettier@3.6.2:
     resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
@@ -3731,6 +3792,10 @@ snapshots:
       source-map-js: 1.2.1
 
   prelude-ls@1.2.1: {}
+
+  prettier-plugin-tailwindcss@0.6.11(prettier@3.6.2):
+    dependencies:
+      prettier: 3.6.2
 
   prettier@3.6.2: {}
 

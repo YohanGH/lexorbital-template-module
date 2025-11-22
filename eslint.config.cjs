@@ -1,10 +1,10 @@
 // config/eslint/eslint.config.cjs
 
-const tsParser = require("@typescript-eslint/parser");
-const tsPlugin = require("@typescript-eslint/eslint-plugin");
-const importPlugin = require("eslint-plugin-import");
-const reactPlugin = require("eslint-plugin-react");
-const reactHooksPlugin = require("eslint-plugin-react-hooks");
+const tsParser = require("@typescript-eslint/parser")
+const tsPlugin = require("@typescript-eslint/eslint-plugin")
+const importPlugin = require("eslint-plugin-import")
+const reactPlugin = require("eslint-plugin-react")
+const reactHooksPlugin = require("eslint-plugin-react-hooks")
 
 // Global config: ignore
 const baseIgnoreConfig = {
@@ -16,7 +16,7 @@ const baseIgnoreConfig = {
     "coverage/**",
     ".next/**",
   ],
-};
+}
 
 // Config JS/TS "backend" (Node, ESM)
 const backendConfig = {
@@ -68,7 +68,7 @@ const backendConfig = {
       },
     ],
   },
-};
+}
 
 // Config frontend (React/TS)
 const frontendConfig = {
@@ -127,7 +127,7 @@ const frontendConfig = {
       },
     ],
   },
-};
+}
 
 // Export final: array of configuration objects
-module.exports = [baseIgnoreConfig, backendConfig, frontendConfig];
+module.exports = [baseIgnoreConfig, backendConfig, frontendConfig]

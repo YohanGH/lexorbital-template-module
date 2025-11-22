@@ -1,0 +1,13 @@
+services:
+  pandoc:
+    image: pandoc/latex:latest
+    container_name: lexorbital-pandoc
+    volumes:
+      - ../docs:/data/docs
+      - ../docs/generated:/data/output
+    networks:
+      - lexorbital-network
+    profiles:
+      - docs
+    # This service is meant to be run on-demand, not as a long-running service
+    command: tail -f /dev/null

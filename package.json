@@ -10,6 +10,7 @@
     "lexorbital.module.json"
   ],
   "scripts": {
+    "install:all": "pnpm install -r",
     "dev": "tsc --watch",
     "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
@@ -22,7 +23,13 @@
     "coverage": "vitest run --coverage",
     "prepare": "node .husky/install.mjs",
     "release": "standard-version",
-    "commit": "commit"
+    "docs:generate:html": "./scripts/generate-docs.sh html",
+    "docs:clean": "rm -rf docs/generated",
+    "docker:dev": "docker-compose -f infra/docker-compose.local.yml up",
+    "docker:dev:d": "docker-compose -f infra/docker-compose.local.yml up -d",
+    "docker:dev:down": "docker-compose -f infra/docker-compose.local.yml down",
+    "docker:dev:build": "docker-compose -f infra/docker-compose.local.yml up --build",
+    "docker:dev:logs": "docker-compose -f infra/docker-compose.local.yml logs -f"
   },
   "keywords": [
     "lexorbital",
@@ -39,7 +46,7 @@
     "url": "https://github.com/YohanGH/lexorbital-template-module"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.11.1"
   },
   "lint-staged": {
     "*.ts": [
@@ -51,18 +58,20 @@
     "prettier --write"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@commitlint/types": "^20.0.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^13.0.1",
-    "@semantic-release/github": "^12.0.2",
-    "@semantic-release/release-notes-generator": "^14.1.0",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
+    "@commitlint/cli": "20.1.0",
+    "@commitlint/config-conventional": "20.0.0",
+    "@commitlint/types": "20.0.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "13.0.1",
+    "@semantic-release/github": "12.0.2",
+    "@semantic-release/release-notes-generator": "14.1.0",
+    "eslint": "9.39.1",
+    "eslint-config-prettier": "10.1.8",
+    "husky": "9.1.7",
     "prettier": "3.6.2",
-    "semantic-release": "^25.0.2",
-    "vitest": "^4.0.12"
+    "prettier-plugin-tailwindcss": "0.6.11",
+    "semantic-release": "25.0.2",
+    "vitest": "4.0.12",
+    "typescript": "5.9.3"
   }
 }
