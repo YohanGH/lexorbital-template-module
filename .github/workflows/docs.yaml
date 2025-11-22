@@ -1,6 +1,4 @@
 name: 📚 Documentation Generation
-permissions:
-  contents: write
 
 on:
   push:
@@ -17,10 +15,17 @@ on:
       - 'scripts/generate-docs.sh'
   workflow_dispatch: # Allow manual trigger
 
+# Permissions explicites pour la sécurité
+permissions:
+  contents: read
+
 jobs:
   generate-documentation:
     name: Generate HTML, DOCX & PDF Documentation
     runs-on: ubuntu-24.04
+    # Permissions spécifiques pour ce job
+    permissions:
+      contents: write  # Nécessaire pour GitHub Pages deployment
     
     steps:
       # ========================================================================
@@ -133,7 +138,7 @@ jobs:
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.LEXORBITAL_TOKEN }}
           publish_dir: ./docs/generated
           publish_branch: gh-pages
           commit_message: "📚 Update documentation [skip ci]"
