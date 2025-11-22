@@ -13,15 +13,23 @@ on:
 
 # Permissions explicites pour la sécurité
 permissions:
-  contents: read
+  contents: write  # Needed for committing generated docs
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   generate-documentation:
     name: Generate HTML, DOCX & PDF Documentation
     runs-on: ubuntu-24.04
-    # Permissions spécifiques pour ce job
-    permissions:
-      contents: write  # Nécessaire pour GitHub Pages deployment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
       # ========================================================================
@@ -128,14 +136,44 @@ jobs:
           echo "  - LexOrbital_Module_Guide.pdf (PDF)"
 
       # ========================================================================
-      # 8. Deploy to GitHub Pages (only on main branch push)
+      # 8. Commit and push generated documentation
+      # ========================================================================
+      - name: 💾 Commit generated documentation
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/generated/
+          git diff --staged --quiet || git commit -m "docs: update generated documentation [skip ci]"
+
+      - name: 📤 Push changes
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+      # ========================================================================
+      # 10. Setup GitHub Pages
+      # ========================================================================
+      - name: ⚙️ Setup Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/configure-pages@v5
+
+      # ========================================================================
+      # 11. Upload pages artifact
+      # ========================================================================
+      - name: 📤 Upload pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs/generated
+
+      # ========================================================================
+      # 12. Deploy to GitHub Pages (only on main branch push)
       # ========================================================================
       - name: 🚀 Deploy to GitHub Pages
+        id: deployment
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.LEXORBITAL_TOKEN }}
-          publish_dir: ./docs/generated
-          publish_branch: gh-pages
-          commit_message: "📚 Update documentation [skip ci]"
+        uses: actions/deploy-pages@v4
 
