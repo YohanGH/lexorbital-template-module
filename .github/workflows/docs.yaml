@@ -1,42 +1,39 @@
 name: 📚 Documentation Generation
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
-      - chore/project-structure-template
+      - develop
     paths:
       - 'docs/**'
       - 'scripts/generate-docs.sh'
       - '.github/workflows/docs.yaml'
   workflow_dispatch: # Allow manual trigger
 
-# Permissions explicites pour la sécurité
+# Explicit permissions for security
 permissions:
-  contents: write  # Needed for committing generated docs
+  contents: read
   pages: write
   id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
 
 jobs:
   generate-documentation:
     name: Generate HTML, DOCX & PDF Documentation
     runs-on: ubuntu-24.04
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
+    # Specific permissions for this job
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     steps:
       # ========================================================================
       # 1. Checkout repository
       # ========================================================================
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       # ========================================================================
       # 2. Create output directory
@@ -136,44 +133,26 @@ jobs:
           echo "  - LexOrbital_Module_Guide.pdf (PDF)"
 
       # ========================================================================
-      # 8. Commit and push generated documentation
-      # ========================================================================
-      - name: 💾 Commit generated documentation
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add docs/generated/
-          git diff --staged --quiet || git commit -m "docs: update generated documentation [skip ci]"
-
-      - name: 📤 Push changes
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
-      # ========================================================================
-      # 10. Setup GitHub Pages
+      # 8. Setup GitHub Pages (only on develop branch PR merge)
       # ========================================================================
       - name: ⚙️ Setup Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/configure-pages@v5
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
+        uses: actions/configure-pages@v4
 
       # ========================================================================
-      # 11. Upload pages artifact
+      # 9. Upload artifact to GitHub Pages
       # ========================================================================
-      - name: 📤 Upload pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      - name: 📤 Upload artifact
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./docs/generated
 
       # ========================================================================
-      # 12. Deploy to GitHub Pages (only on main branch push)
+      # 10. Deploy to GitHub Pages
       # ========================================================================
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
         uses: actions/deploy-pages@v4
 
