@@ -1,7 +1,7 @@
 name: 📚 Documentation Generation
 
 on:
-  push:
+  pull_request:
     branches:
       - develop
     paths:
@@ -133,17 +133,17 @@ jobs:
           echo "  - LexOrbital_Module_Guide.pdf (PDF)"
 
       # ========================================================================
-      # 8. Setup GitHub Pages (only on main branch push)
+      # 8. Setup GitHub Pages (only on develop branch PR merge)
       # ========================================================================
       - name: ⚙️ Setup Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
         uses: actions/configure-pages@v4
 
       # ========================================================================
       # 9. Upload artifact to GitHub Pages
       # ========================================================================
       - name: 📤 Upload artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./docs/generated
@@ -153,7 +153,6 @@ jobs:
       # ========================================================================
       - name: 🚀 Deploy to GitHub Pages
         id: deployment
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        id: deployment
+        if: github.base_ref == 'develop' && github.event_name == 'pull_request'
         uses: actions/deploy-pages@v4
 
