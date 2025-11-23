@@ -3,15 +3,14 @@ name: 📚 Documentation Generation
 on:
   push:
     branches:
-      - main
-      - chore/project-structure-template
+      - develop
     paths:
       - 'docs/**'
       - 'scripts/generate-docs.sh'
       - '.github/workflows/docs.yaml'
   workflow_dispatch: # Allow manual trigger
 
-# Permissions explicites pour la sécurité
+# Explicit permissions for security
 permissions:
   contents: read
   pages: write
@@ -21,12 +20,11 @@ jobs:
   generate-documentation:
     name: Generate HTML, DOCX & PDF Documentation
     runs-on: ubuntu-24.04
-    # Permissions spécifiques pour ce job
+    # Specific permissions for this job
     permissions:
       contents: read
       pages: write
       id-token: write
-    
     steps:
       # ========================================================================
       # 1. Checkout repository
