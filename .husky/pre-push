@@ -1,49 +1,109 @@
 #!/usr/bin/env sh
 
 # Trigger: before each `git push`
-# Goal: ensure branch naming, tests and lint pass
+# Goal: 
+# - ensure branch naming
+# - tests and lint pass
 
-echo "🚀 Running pre-push checks..."
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+# Colors for output (optional, mais améliore la lisibilité)
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Fonction for error messages
+error() {
+  echo "${RED}❌ $1${NC}" >&2
+}
+
+success() {
+  echo "${GREEN}✅ $1${NC}"
+}
+
+warning() {
+  echo "${YELLOW}⚠️  $1${NC}"
+}
+
+info() {
+  echo "${BLUE}🚀 $1${NC}"
+}
+
+# verify we are in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  error "LexOrbital: Not in a git repository"
+  exit 1
+fi
+
+# verify pnpm is available
+if ! command -v pnpm > /dev/null 2>&1; then
+  error "LexOrbital: pnpm is not installed or not in PATH"
+  exit 1
+fi
+
+info "Running pre-push checks..."
 
 # Check branch naming convention
 branch_name="$(git rev-parse --abbrev-ref HEAD)"
 
-pattern='^(feat|fix|chore|refactor|docs|ci|infra|security)\/[a-z0-9]+(-[a-z0-9]+)+$'
+# improved pattern: more strict on the minimum length
+# Requiert au moins 3 caractères pour le scope et au moins 2 mots dans la description
+pattern='^(feat|fix|chore|refactor|docs|ci|infra|security)\/[a-z0-9]{3,}(-[a-z0-9]{2,})+$'
 
 if ! echo "$branch_name" | grep -Eq "$pattern"; then
-  echo "❌ LexOrbital: invalid branch name '$branch_name'"
+  error "LexOrbital: invalid branch name '$branch_name'"
   echo "   Expected: <type>/<scope>-<short-desc-kebab>"
   echo "   type ∈ feat|fix|chore|refactor|docs|ci|infra|security"
+  echo "   scope: min 3 chars, description: min 2 words"
+  echo ""
+  echo "   Examples:"
+  echo "   ✅ feat/user-authentication"
+  echo "   ✅ fix/login-bug"
+  echo "   ❌ feat/a-b (too short)"
   exit 1
 fi
 
-echo "✅ Branch name check passed"
+success "Branch name check passed"
 
-# Optional: ensure code is formatted before pushing
-if pnpm run format:check 2>/dev/null; then
-  echo "✅ Format check passed"
-elif pnpm exec prettier --check . 2>/dev/null; then
-  echo "✅ Format check passed (prettier)"
+# special verification for main branches
+if [ "$branch_name" = "main" ] || [ "$branch_name" = "master" ] || [ "$branch_name" = "develop" ]; then
+  warning "Pushing to protected branch '$branch_name'"
+  # you could add additional checks here
+  # for example: verify that the CI tests pass, etc.
+fi
+
+# optional: ensure code is formatted before pushing
+format_check_passed=false
+if pnpm run format:check > /dev/null 2>&1; then
+  success "Format check passed"
+  format_check_passed=true
+elif pnpm exec prettier --check . > /dev/null 2>&1; then
+  success "Format check passed (prettier)"
+  format_check_passed=true
 else
-  echo "⚠️  Format check skipped (no format:check script found)"
+  warning "Format check skipped (no format:check script found)"
 fi
 
-echo "🧪 Running tests..."
-pnpm test
-TEST_STATUS=$?
+# if the format check exists but fails, we should fail
+# but as it's optional, we continue
 
-if [ $TEST_STATUS -ne 0 ]; then
-  echo "❌ Tests failed. Push aborted."
-  exit $TEST_STATUS
+info "Running tests..."
+if ! pnpm test; then
+  error "Tests failed. Push aborted."
+  exit 1
 fi
 
-echo "🎨 Running lint..."
-pnpm run lint
-LINT_STATUS=$?
+success "Tests passed"
 
-if [ $LINT_STATUS -ne 0 ]; then
-  echo "❌ Lint failed. Push aborted."
-  exit $LINT_STATUS
+info "Running lint..."
+if ! pnpm run lint; then
+  error "Lint failed. Push aborted."
+  exit 1
 fi
 
-echo "✅ Pre-push checks passed. Ready to push 🚀"
+success "Lint passed"
+
+success "Pre-push checks passed. Ready to push 🚀"

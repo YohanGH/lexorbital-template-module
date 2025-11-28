@@ -10,13 +10,52 @@
 #   - Block commit if any check fails
 # Goal: Quick quality filter to catch obvious errors early before CI
 
+# Note: We use 'set -u' and 'set -o pipefail' but disable 'set -e' in loops
+# to handle errors gracefully and capture exit codes properly
+set -u
+set -o pipefail
+
 . "$(dirname "$0")/common.sh"
+
+# Helper function to check if we're in a git repository
+check_git_repo() {
+  if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "❌ Error: Not in a git repository" >&2
+    exit 1
+  fi
+}
+
+# Helper function to run tests
+run_tests() {
+  if command -v pnpm >/dev/null 2>&1 && grep -q '"test"' package.json 2>/dev/null; then
+    pnpm test 2>&1
+  elif command -v npx >/dev/null 2>&1; then
+    npx --no-install vitest run 2>&1
+  else
+    echo "⚠️  Test runner not found - skipping tests"
+    return 0
+  fi
+}
+
+# Helper function to run dependency cruiser validation
+run_depcruise() {
+  if command -v pnpm >/dev/null 2>&1 && grep -q '"depcruise:validate"' package.json 2>/dev/null; then
+    pnpm depcruise:validate 2>&1
+  elif command -v npx >/dev/null 2>&1; then
+    npx --no-install depcruise --config .dependency-cruiser.cjs --output-type err frontend/src backend/src config tests scripts 2>&1
+  else
+    echo "⚠️  Dependency-cruiser not found - skipping dependency validation"
+    return 0
+  fi
+}
+
+check_git_repo
 
 echo "🚀 Running pre-commit checks..."
 
 # Detect which files were staged for commit
 echo "🔍 Detecting staged files..."
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
 
 if [ -z "$STAGED_FILES" ]; then
   echo "⚠️  No files staged for commit. Skipping pre-commit checks."
@@ -24,27 +63,20 @@ if [ -z "$STAGED_FILES" ]; then
 fi
 
 # Check if TypeScript files or code files were modified
+# Use grep to check file patterns (handles spaces in filenames correctly)
 TS_FILES_MODIFIED=false
 CODE_MODIFIED=false
 
-# Process each staged file
-for file in $(echo "$STAGED_FILES" | tr '\n' ' '); do
-  [ -z "$file" ] && continue
-  
-  # Check for TypeScript files
-  case "$file" in
-    *.ts|*.tsx)
-      TS_FILES_MODIFIED=true
-      CODE_MODIFIED=true
-      ;;
-  esac
-  # Check for other code files (src/, tests/, config/, or JS extensions)
-  case "$file" in
-    src/*|tests/*|config/*|*.js|*.jsx)
-      CODE_MODIFIED=true
-      ;;
-  esac
-done
+# Check for TypeScript files
+if echo "$STAGED_FILES" | grep -qE '\.(ts|tsx)$'; then
+  TS_FILES_MODIFIED=true
+  CODE_MODIFIED=true
+fi
+
+# Check for other code files (src/, tests/, config/, or JS extensions)
+if echo "$STAGED_FILES" | grep -qE '(^src/|^tests/|^config/|\.(js|jsx)$)'; then
+  CODE_MODIFIED=true
+fi
 
 # If no code files were modified, skip type checking (e.g., docs-only changes)
 if [ "$CODE_MODIFIED" = false ]; then
@@ -66,13 +98,15 @@ if [ "$TS_FILES_MODIFIED" = true ]; then
 
   if [ -n "$TSCONFIG" ]; then
     # Use npx to ensure we use the local TypeScript version
+    set +e  # Disable exit on error to capture status
     npx --no-install tsc --noEmit --project "$TSCONFIG" 2>&1
     TSC_STATUS=$?
+    set -e  # Re-enable exit on error
 
-    if [ $TSC_STATUS -ne 0 ]; then
+    if [ "$TSC_STATUS" -ne 0 ]; then
       echo "❌ TypeScript type check failed!"
       echo "   Fix type errors before committing."
-      exit $TSC_STATUS
+      exit "$TSC_STATUS"
     fi
 
     echo "✅ Type check passed"
@@ -87,46 +121,53 @@ fi
 if [ "$CODE_MODIFIED" = true ]; then
   echo "🧪 Running unit tests..."
 
-  # Check if vitest is available (should be in package.json)
-  if command -v pnpm >/dev/null 2>&1 && grep -q '"test"' package.json 2>/dev/null; then
-    pnpm test 2>&1
-    TEST_STATUS=$?
+  set +e  # Disable exit on error to capture status
+  run_tests
+  TEST_STATUS=$?
+  set -e  # Re-enable exit on error
 
-    if [ $TEST_STATUS -ne 0 ]; then
-      echo "❌ Tests failed!"
-      echo "   Fix failing tests before committing."
-      exit $TEST_STATUS
-    fi
-
-    echo "✅ All tests passed"
-  elif command -v npx >/dev/null 2>&1; then
-    # Fallback to npx vitest if pnpm is not available
-    npx --no-install vitest run 2>&1
-    TEST_STATUS=$?
-
-    if [ $TEST_STATUS -ne 0 ]; then
-      echo "❌ Tests failed!"
-      echo "   Fix failing tests before committing."
-      exit $TEST_STATUS
-    fi
-
-    echo "✅ All tests passed"
-  else
-    echo "⚠️  Test runner not found - skipping tests"
+  if [ "$TEST_STATUS" -ne 0 ]; then
+    echo "❌ Tests failed!"
+    echo "   Fix failing tests before committing."
+    exit "$TEST_STATUS"
   fi
+
+  echo "✅ All tests passed"
 else
   echo "⏭️  Skipping tests (no code/test files modified)"
 fi
 
 # Lint-staged (ESLint + Prettier on staged files only)
 echo "🎨 Running lint-staged (ESLint + Prettier)..."
+set +e  # Disable exit on error to capture status
 npx --no-install lint-staged
 LINT_STAGED_STATUS=$?
+set -e  # Re-enable exit on error
 
-if [ $LINT_STAGED_STATUS -ne 0 ]; then
+if [ "$LINT_STAGED_STATUS" -ne 0 ]; then
   echo "❌ Lint-staged failed!"
   echo "   Some files may need manual fixes. Check the output above."
-  exit $LINT_STAGED_STATUS
+  exit "$LINT_STAGED_STATUS"
+fi
+
+# Dependency cruiser validation (only if code files were modified)
+if [ "$CODE_MODIFIED" = true ]; then
+  echo "🔗 Running dependency-cruiser validation..."
+
+  set +e  # Disable exit on error to capture status
+  run_depcruise
+  DEPCRUISE_STATUS=$?
+  set -e  # Re-enable exit on error
+
+  if [ "$DEPCRUISE_STATUS" -ne 0 ]; then
+    echo "❌ Dependency validation failed!"
+    echo "   Fix dependency violations before committing."
+    exit "$DEPCRUISE_STATUS"
+  fi
+
+  echo "✅ Dependency validation passed"
+else
+  echo "⏭️  Skipping dependency validation (no code files modified)"
 fi
 
 echo "✅ All pre-commit checks passed!"

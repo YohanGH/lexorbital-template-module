@@ -1,14 +1,31 @@
 #!/usr/bin/env sh
 
 # Trigger: After git merge or git pull
-# Goal: remind to run `pnpm install` if dependencies have changed
+# Goal: Remind to run `pnpm install` if dependencies have changed
+
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+# Verify we are in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "❌ Error: Not in a git repository" >&2
+  exit 1
+fi
 
 echo "🔄 Post-merge automation..."
 
+# Check if ORIG_HEAD exists (may not exist on first merge)
+if [ ! -f "$(git rev-parse --git-dir)/ORIG_HEAD" ]; then
+  echo "ℹ️  No previous HEAD found - skipping dependency check"
+  echo "✅ Post-merge completed!"
+  exit 0
+fi
+
 # Simple dependency check
+# Check if package.json or package-lock.json files were modified
 if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null \
-  | grep -E "package(-lock)?\.json$" >/dev/null; then
+  | grep -E "package(-lock)?\.json$" >/dev/null 2>&1; then
   echo "📦 Dependencies may have changed - consider running 'pnpm install'"
 fi
 
-echo "✅ Post-merge completed!" 
+echo "✅ Post-merge completed!"
