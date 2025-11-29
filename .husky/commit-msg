@@ -1,8 +1,7 @@
 #!/usr/bin/env sh
 
-# Trigger : At each git commit
-# Duration : <1 second
-# Actions :
+# Trigger: At each git commit
+# Actions:
 #   - Validate commit message format with commitlint
 #   - Enforce conventional commits (type(scope): description)
 #   - Display helpful guide if validation fails
@@ -10,19 +9,41 @@
 #     - feat: add new feature
 #     - fix(api): resolve memory leak
 #     - docs: update README
-#     - Block commit with invalid format
-# Goal : Ensure commit messages follow a consistent format and are valid
+#   - Block commit with invalid format
+# Goal: Ensure commit messages follow a consistent format and are valid
+
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+# Verify we are in a git repository
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+  echo "❌ Error: Not in a git repository" >&2
+  exit 1
+fi
+
+# Verify commit message file is provided
+if [ -z "${1:-}" ]; then
+  echo "❌ Error: Commit message file not provided" >&2
+  exit 1
+fi
+
+# Verify commit message file exists
+if [ ! -f "$1" ]; then
+  echo "❌ Error: Commit message file '$1' does not exist" >&2
+  exit 1
+fi
 
 echo "📝 Validating commit message with commitlint..."
 
-# 1. Execute commitlint with detailed output (prefer pnpm when available)
+# Execute commitlint with detailed output (prefer pnpm when available)
+COMMITLINT_STATUS=0
 if command -v pnpm >/dev/null 2>&1; then
-  pnpm exec commitlint --edit "$1" --verbose
+  pnpm exec commitlint --edit "$1" --verbose || COMMITLINT_STATUS=$?
 else
-  npx --no-install commitlint --edit "$1" --verbose
+  npx --no-install commitlint --edit "$1" --verbose || COMMITLINT_STATUS=$?
 fi
 
-if [ $? -ne 0 ]; then
+if [ "$COMMITLINT_STATUS" -ne 0 ]; then
   echo ""
   echo "❌ Commit message validation failed!"
   echo ""
@@ -42,7 +63,7 @@ if [ $? -ne 0 ]; then
   echo "📝 Format: type(scope): description"
   echo "   Example: feat(auth): add user login validation"
   echo ""
-  exit 1
+  exit "$COMMITLINT_STATUS"
 fi
 
 echo "✅ Commit message is valid!"

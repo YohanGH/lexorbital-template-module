@@ -1,19 +1,36 @@
 ---
-name: Documentation
-about: Describe this issue template's purpose here.
-title: ""
-labels: documentation
+name: "DOC – Documentation / Diagram Update"
+about: "Update documentation, manifests documentation, or auto-generated diagrams."
+title: "[DOC]: "
+labels:
+  - documentation
 assignees: ""
 ---
 
-For:
-– missing/incorrect documentation,
-– incorrect diagram,
-– README or documentation page to be completed.
+# 📚 Documentation / Diagram Task
 
-Fields:
+## 📄 Page or File Concerned
 
-- Page concerned (URL/path)
-- Problem identified
-- Proposed correction/clarification
-- Possible link to a PR or example
+URL or file path.
+
+## ❗ Issue Identified
+
+What is missing, incorrect, unclear?
+
+## 🛠 Proposed Update
+
+Describe the fix or enhancement.
+
+## 🗺 Diagram Update (if applicable)
+
+Paste Mermaid or attach diagram.
+
+## ✔️ Acceptance Criteria
+
+- [ ] Documentation updated
+- [ ] Manifests validated
+- [ ] Mermaid diagram regenerated
+
+## 📦 Repository
+
+Which repo is impacted?
